@@ -3,55 +3,87 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using proTaxi.Domain.Interfaces;
+using proTaxi.Persistence.Context;
 using System.Linq.Expressions;
 
 namespace proTaxi.Persistence.Repository
 {
-    public abstract class BaseRepository<TEntity, TData, TType> : IRepository<TEntity, TData, TType> where TEntity : class
+    public abstract class BaseRepository<TEntity, TType> : IRepository<TEntity, TType> where TEntity : class
     {
-        private readonly DbContext _dbContext;
+        private readonly TaxiDb _dbContext;
         private DbSet<TEntity> _dbSet;
-        public BaseRepository(DbContext dbContext)
+        public BaseRepository(TaxiDb dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<TEntity>();
         }
-        public Task<TData> Exists(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> filter)
         {
-            TData data = null;
+            bool result = false;
             try
             {
-
+                result = await _dbSet.AnyAsync(filter);
             }
             catch (Exception ex)
             {
-              
+                result = false; 
             }
+            return result;
         }
 
-        public Task<TData> GetAll()
+        public virtual async Task<List<TEntity>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _dbSet.ToListAsync();
         }
 
-        public Task<TData> GetEntityBy(TType Id)
+        public virtual async Task<TEntity> GetEntityBy(TType Id)
         {
-            throw new NotImplementedException();
+            return await this._dbSet.FindAsync(Id);
         }
 
-        public Task<TData> Remove(TEntity entity)
+        public virtual async Task<bool> Remove(TEntity entity)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            try
+            {
+                _dbSet.Remove(entity);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+            return result;
         }
 
-        public Task<TData> Save(TEntity entity)
+        public virtual async Task<bool> Save(TEntity entity)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            try
+            {
+                _dbSet.Add(entity);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+            return result;
         }
 
-        public Task<TData> Update(TEntity entity)
+        public virtual async Task<bool> Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            try
+            {
+                _dbSet.Update(entity);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+            return result;
         }
     }
 }
