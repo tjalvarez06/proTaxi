@@ -9,7 +9,7 @@ namespace proTaxi.Persistence.Interfaces
 {
     public interface IViajeRepository : IRepository<Viaje, int>
     {
-        Task<DataResult<ViajeModel>> GetViajes();
+        Task<DataResult<List<ViajeModel>>> GetViajes();
         Task<DataResult<ViajeModel>> GetViajes(string name);
         
     }

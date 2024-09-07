@@ -2,7 +2,9 @@
 
 namespace proTaxi.Persistence.Models.Taxi
 {
-    internal class TaxiModel
+    public class TaxiModel
     {
+        public int Id { get; set; }
+        public string Placa { get; set; }
     }
 }

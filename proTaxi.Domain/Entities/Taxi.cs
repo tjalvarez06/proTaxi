@@ -12,6 +12,6 @@ namespace proTaxi.Domain.Entities
         [Key]
         [Column("Id")]
         public override int Id { get; set; }
-        public string? Placa { get; set; }
+        public string Placa { get; set; }
     }
 }

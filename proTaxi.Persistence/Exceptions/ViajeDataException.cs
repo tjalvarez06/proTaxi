@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace proTaxi.Persistence.Exceptions
 {
-    internal class ViajeDataException
+    public class ViajeDataException : Exception
     {
+        public ViajeDataException(string message) : base(message) 
+        {
+            
+        }
     }
 }
