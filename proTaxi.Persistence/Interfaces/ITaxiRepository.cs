@@ -24,10 +24,10 @@ namespace proTaxi.Persistence.Interfaces
         Task<DataResult<TaxiModel>> GetTaxiByPlaca(string placa);
 
         /// <summary>
-        /// Get all taxis by viaje hasta
+        /// Get all taxis by viaje ID
         /// </summary>
-        /// <param hasta="viajeHasta">viaje of taxi</param>
+        /// <param hasta="viajeId">viaje of taxi</param>
         /// <returns></returns>
-        Task<DataResult<TaxiModel>> GetTaxiByHasta(string viajeHasta);
+        Task<DataResult<List<TaxiModel>>> GetTaxiByViaje(int viajeId);
     }
 }

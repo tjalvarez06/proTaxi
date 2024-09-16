@@ -1,6 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using proTaxi.Persistence.Context;
+using proTaxi.Persistence.Interfaces;
+using proTaxi.Persistence.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<TaxiDb>(opcions => 
+                                    opcions.UseSqlServer(builder.Configuration.GetConnectionString("TaxiDb")));
+
+builder.Services.AddTransient<IViajeRepository, ViajeRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

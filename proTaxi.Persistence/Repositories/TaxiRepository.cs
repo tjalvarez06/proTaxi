@@ -1,5 +1,6 @@
 ﻿
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using proTaxi.Domain.Entities;
@@ -26,9 +27,33 @@ namespace proTaxi.Persistence.Repositories
             this.configuration = configuration;
         }
 
-        public Task<DataResult<TaxiModel>> GetTaxiByHasta(string viajeHasta)
+        public async Task<DataResult<List<TaxiModel>>> GetTaxiByViaje(int viajeId)
         {
-            throw new NotImplementedException();
+            DataResult<List<TaxiModel>> result = new DataResult<List<TaxiModel>>();
+
+            try
+            {
+                var query = await (from taxi in this.taxiDb.Taxi
+                                   join viaje in this.taxiDb.Viaje on taxi.Id equals viaje.Id
+                                   where taxi.Deleted == false
+                                    && taxi.Id == viajeId
+                                   select new TaxiModel()
+                                   {
+                                       Placa = taxi.Placa,
+                                       Id = viaje.Id
+                                   }).ToListAsync();
+
+
+                result.Result = query;
+            }
+            catch (Exception ex)
+            {
+
+                result.Message = this.configuration["course:get_taxi_viaje_id"];
+                result.Success = false;
+                this.logger.LogError(this.configuration["course:get_taxi_viaje_id"], ex.ToString());
+            }
+            return result;
         }
 
         public Task<DataResult<TaxiModel>> GetTaxiByPlaca(string placa)
@@ -36,9 +61,32 @@ namespace proTaxi.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<DataResult<List<TaxiModel>>> GetTaxis()
+        public async Task<DataResult<List<TaxiModel>>> GetTaxis()
         {
-            throw new NotImplementedException();
+            DataResult<List<TaxiModel>> result = new DataResult<List<TaxiModel>>();
+
+            try
+            {
+                var query = await (from taxi in this.taxiDb.Taxi
+                                   join viaje in this.taxiDb.Viaje on taxi.Id equals viaje.Id
+                                   where taxi.Deleted == false
+                                   select new TaxiModel()
+                                   {
+                                       Placa = taxi.Placa,
+                                       Id = viaje.Id
+                                   }).ToListAsync();
+
+
+                result.Result = query;
+            }
+            catch (Exception ex)
+            {
+
+                result.Message = this.configuration["taxi:get_taxis"];
+                result.Success = false;
+                this.logger.LogError(this.configuration["taxi:get_taxis"], ex.ToString());
+            }
+            return result;
         }
         public override Task<bool> Save(Taxi entity)
         {

@@ -67,6 +67,11 @@ namespace proTaxi.Persistence.Repositories
                                              .SingleOrDefaultAsync(viaje => viaje.Hasta == hasta
                                                                    && viaje.Deleted == false);
 
+                if (viaje == null)
+                {
+                    result.Message = "El viaje no se encuentra registrado o fue eliminado";
+                    result.Success = false;
+                }
                 result.Result = new ViajeModel()
                 {
                     Id = viaje.Id,
@@ -145,8 +150,19 @@ namespace proTaxi.Persistence.Repositories
                 {
                     throw new ViajeDataException(this.configuration["Viaje:fecha_inicio_is_null"]);
                 }
+                Viaje? viajeToUpdate = this.taxiDb.Viaje.Find(entity.Id);
 
-                result = await base.Update(entity);
+                viajeToUpdate.FechaInicio = entity.FechaInicio.Value;
+                viajeToUpdate.FechaFin = entity.FechaFin;
+                viajeToUpdate.Desde = entity.Desde;
+                viajeToUpdate.Hasta = entity.Hasta;
+                viajeToUpdate.Calificacion = entity.Calificacion;
+                viajeToUpdate.TaxiId = entity.TaxiId;
+                viajeToUpdate.UsuarioId = entity.UsuarioId;
+                viajeToUpdate.ModifyDate = entity.ModifyDate;
+                viajeToUpdate.ModifyUser = entity.ModifyUser;
+
+                result = await base.Update(viajeToUpdate);
             }
             catch (Exception ex)
             {

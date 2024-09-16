@@ -48,6 +48,7 @@ namespace proTaxi.Persistence.Repository
             {
                 _dbSet.Remove(entity);
                 await _dbContext.SaveChangesAsync();
+                result = true;
             }
             catch (Exception ex)
             {
@@ -63,6 +64,7 @@ namespace proTaxi.Persistence.Repository
             {
                 _dbSet.Add(entity);
                 await _dbContext.SaveChangesAsync();
+                result = true;
             }
             catch (Exception ex)
             {
@@ -78,6 +80,7 @@ namespace proTaxi.Persistence.Repository
             {
                 _dbSet.Update(entity);
                 await _dbContext.SaveChangesAsync();
+                result = true;
             }
             catch (Exception ex)
             {
