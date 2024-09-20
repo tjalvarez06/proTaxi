@@ -10,6 +10,7 @@ builder.Services.AddDbContext<TaxiDb>(opcions =>
                                     opcions.UseSqlServer(builder.Configuration.GetConnectionString("TaxiDb")));
 
 builder.Services.AddTransient<IViajeRepository, ViajeRepository>();
+builder.Services.AddTransient<ITaxiRepository, TaxiRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

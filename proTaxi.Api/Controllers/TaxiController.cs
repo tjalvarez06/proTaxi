@@ -1,4 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using proTaxi.Api.Models.Taxi;
+using proTaxi.Api.Models.Viaje;
+using proTaxi.Domain.Models;
+using proTaxi.Persistence.Interfaces;
+using proTaxi.Persistence.Models.Taxi;
+using proTaxi.Persistence.Models.Viaje;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,40 +14,78 @@ namespace proTaxi.Api.Controllers
     [ApiController]
     public class TaxiController : ControllerBase
     {
-        public TaxiController() 
+        private readonly ITaxiRepository taxiRepository;
+        public TaxiController(ITaxiRepository taxiRepository) 
         {
-        
+            this.taxiRepository = taxiRepository;
         }
         // GET: api/<TaxiController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("GetTaxis")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            DataResult<List<TaxiModel>> result = new DataResult<List<TaxiModel>>();
+            result = await this.taxiRepository.GetTaxis();
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         // GET api/<TaxiController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetTaxisByPlaca")]
+        public async Task<IActionResult> Get(string placa)
         {
-            return "value";
+            DataResult<TaxiModel> result = new DataResult<TaxiModel>();
+            result = await this.taxiRepository.GetTaxiByPlaca(placa);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         // POST api/<TaxiController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("CreateTaxi")]
+        public async Task<IActionResult> Post([FromBody] TaxiSaveDto taxiSave)
         {
+            bool result = false;
+
+            result = await this.taxiRepository.Save(new Domain.Entities.Taxi()
+            {
+                Id = taxiSave.Id,
+                Placa = taxiSave.Placa,
+                CreationDate = taxiSave.CreationDate,
+                CreationUser = taxiSave.CreationUser
+            });
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok();
         }
 
         // PUT api/<TaxiController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateTaxi")]
+        public async Task<IActionResult> Put([FromBody] TaxiUpdateDto taxiUpdate)
         {
-        }
+            bool result = false;
 
-        // DELETE api/<TaxiController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            result = await this.taxiRepository.Update(new Domain.Entities.Taxi()
+            {
+                Id = taxiUpdate.Id,
+                Placa = taxiUpdate.Placa,
+                ModifyDate = taxiUpdate.ModifyDate,
+                ModifyUser = taxiUpdate.ModifyUser
+            });
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok();
         }
     }
 }

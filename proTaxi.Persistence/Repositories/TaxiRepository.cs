@@ -6,13 +6,14 @@ using Microsoft.Extensions.Logging;
 using proTaxi.Domain.Entities;
 using proTaxi.Domain.Models;
 using proTaxi.Persistence.Context;
+using proTaxi.Persistence.Exceptions;
 using proTaxi.Persistence.Interfaces;
 using proTaxi.Persistence.Models.Taxi;
 using proTaxi.Persistence.Repository;
 
 namespace proTaxi.Persistence.Repositories
 {
-    public class TaxiRepository : BaseRepository<Taxi, int>, ITaxiRepository
+    public sealed class TaxiRepository : BaseRepository<Taxi, int>, ITaxiRepository
     {
         private readonly TaxiDb taxiDb;
         private readonly ILogger<TaxiRepository> logger;
@@ -56,9 +57,34 @@ namespace proTaxi.Persistence.Repositories
             return result;
         }
 
-        public Task<DataResult<TaxiModel>> GetTaxiByPlaca(string placa)
+        public async Task<DataResult<TaxiModel>> GetTaxiByPlaca(string placa)
         {
-            throw new NotImplementedException();
+            DataResult<TaxiModel> result = new DataResult<TaxiModel>();
+            try
+            {
+                var taxi = await this.taxiDb.Taxi
+                                             .SingleOrDefaultAsync(taxi => taxi.Placa == placa
+                                                                   && taxi.Deleted == false);
+
+                if (taxi == null)
+                {
+                    result.Message = "El taxi no se encuentra registrado o fue eliminado";
+                    result.Success = false;
+                }
+                result.Result = new TaxiModel()
+                {
+                    Id = taxi.Id,
+                    Placa = taxi.Placa,
+                };
+            }
+            catch (Exception ex)
+            {
+
+                result.Success = false;
+                result.Message = this.configuration["taxi:error_get_taxi_placa"];
+                this.logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
         }
 
         public async Task<DataResult<List<TaxiModel>>> GetTaxis()
@@ -67,17 +93,16 @@ namespace proTaxi.Persistence.Repositories
 
             try
             {
-                var query = await (from taxi in this.taxiDb.Taxi
-                                   join viaje in this.taxiDb.Viaje on taxi.Id equals viaje.Id
+                var taxis = await (from taxi in this.taxiDb.Taxi
                                    where taxi.Deleted == false
                                    select new TaxiModel()
                                    {
                                        Placa = taxi.Placa,
-                                       Id = viaje.Id
+                                       Id = taxi.Id
                                    }).ToListAsync();
 
 
-                result.Result = query;
+                result.Result = taxis;
             }
             catch (Exception ex)
             {
@@ -88,13 +113,71 @@ namespace proTaxi.Persistence.Repositories
             }
             return result;
         }
-        public override Task<bool> Save(Taxi entity)
+        public override async Task<bool> Save(Taxi entity)
         {
-            return base.Save(entity);
-        }
-        public override Task<bool> Update(Taxi entity)
+            bool result = false;
+            try
+            {
+                if (entity == null)
+                {
+                    throw new ArgumentNullException(this.configuration["taxi:entity"]);
+                }
+
+                if (await base.Exists(taxi => taxi.Placa == entity.Placa))
+                    throw new TaxiDataException(this.configuration["taxi:placa_exists"]);
+
+                if (string.IsNullOrEmpty(entity.Placa))
+                {
+                    throw new TaxiDataException(this.configuration["taxi:placa_is_null"]);
+                }
+                if (entity.Placa.Length > 50)
+                {
+                    throw new TaxiDataException(this.configuration["taxi:placa_length"]);
+                }
+                
+                result = await base.Save(entity);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                this.logger.LogError(this.configuration["taxi:error_save"], ex.ToString());
+            }
+            return result;
+        
+    }
+        public override async Task<bool> Update(Taxi entity)
         {
-            return base.Update(entity);
+            bool result = false;
+            try
+            {
+                if (entity == null)
+                {
+                    throw new ArgumentNullException(this.configuration["taxi:entity"]);
+                }
+
+                if (string.IsNullOrEmpty(entity.Placa))
+                {
+                    throw new TaxiDataException(this.configuration["taxi:placa_is_null"]);
+                }
+                if (entity.Placa.Length > 50)
+                {
+                    throw new TaxiDataException(this.configuration["taxi:placa_length"]);
+                }
+
+                Taxi? TaxiToUpdate = this.taxiDb.Taxi.Find(entity.Id);
+
+                TaxiToUpdate.Placa = entity.Placa;
+                TaxiToUpdate.ModifyDate = entity.ModifyDate;
+                TaxiToUpdate.ModifyUser = entity.ModifyUser;
+
+                result = await base.Update(TaxiToUpdate);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                this.logger.LogError(this.configuration["taxi:error_update"], ex.ToString());
+            }
+            return result;
         }
     }
 }
