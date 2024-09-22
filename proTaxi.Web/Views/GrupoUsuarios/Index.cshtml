@@ -1,0 +1,38 @@
+﻿@model proTaxi.Domain.Models.DataResult<List<proTaxi.Persistence.Models.GrupoUsuarios.GrupoUsuariosModel>>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>GrupoUsuarios</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@if (!Model.Success)
+{
+    <span class="alert-danger">@Model.Message</span>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Result) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id}) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id}) |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

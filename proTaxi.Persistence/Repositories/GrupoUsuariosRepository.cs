@@ -74,6 +74,7 @@ namespace proTaxi.Persistence.Repositories
                 result.Result = new GrupoUsuariosModel()
                 {
                     Id = grupoUsuarios.Id,
+                    Name = grupoUsuarios.Name,
                 };
             }
             catch (Exception ex)
@@ -94,9 +95,11 @@ namespace proTaxi.Persistence.Repositories
             {
                 var grupoUsuarios = await (from grupoUsuario in this.taxiDb.GrupoUsuarios
                                    where grupoUsuario.Deleted == false
+                                   orderby grupoUsuario.CreationDate descending
                                    select new GrupoUsuariosModel()
                                    {
-                                       Id = grupoUsuario.Id
+                                       Id = grupoUsuario.Id,
+                                       Name= grupoUsuario.Name,
                                    }).ToListAsync();
 
 
@@ -156,6 +159,7 @@ namespace proTaxi.Persistence.Repositories
                 GrupoUsuarios? GrupoUsuarioToUpdate = this.taxiDb.GrupoUsuarios.Find(entity.Id);
 
                 GrupoUsuarioToUpdate.Id = entity.Id;
+                GrupoUsuarioToUpdate.Name = entity.Name;
                 GrupoUsuarioToUpdate.ModifyDate = entity.ModifyDate;
                 GrupoUsuarioToUpdate.ModifyUser = entity.ModifyUser;
 

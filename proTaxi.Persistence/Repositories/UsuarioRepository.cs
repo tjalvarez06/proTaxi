@@ -35,13 +35,14 @@ namespace proTaxi.Persistence.Repositories
             {
                 var usuarios = await (from usuario in this.taxiDb.Usuario
                                     where usuario.Deleted == false
-                                    select new UsuarioModel
+                                      orderby usuario.CreationDate descending
+                                      select new UsuarioModel
                                     {
                                         Id = usuario.Id,
                                         Documento = usuario.Documento,
                                         Nombre = usuario.Nombre,
                                         Apellido = usuario.Apellido,
-                                        GrupoUsuarioId = usuario.GrupoUsuarioId
+                                        GrupoUsuariosId = usuario.GrupoUsuariosId
                                     }).ToListAsync();
 
                 result.Result = usuarios;
@@ -75,7 +76,7 @@ namespace proTaxi.Persistence.Repositories
                     Documento = usuario.Documento,
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
-                    GrupoUsuarioId = usuario.GrupoUsuarioId
+                    GrupoUsuariosId = usuario.GrupoUsuariosId
                 };
             }
             catch (Exception ex)
@@ -144,7 +145,7 @@ namespace proTaxi.Persistence.Repositories
                     usuarioToUpdate.Documento = entity.Documento;
                     usuarioToUpdate.Nombre = entity.Nombre;
                     usuarioToUpdate.Apellido = entity.Apellido;
-                    usuarioToUpdate.GrupoUsuarioId = entity.GrupoUsuarioId;
+                    usuarioToUpdate.GrupoUsuariosId = entity.GrupoUsuariosId;
                     usuarioToUpdate.ModifyDate = entity.ModifyDate;
                     usuarioToUpdate.ModifyUser = entity.ModifyUser;
                 

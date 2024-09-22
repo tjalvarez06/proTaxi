@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proTaxi.Domain", "proTaxi.Domain\proTaxi.Domain.csproj", "{AEE65B69-33B2-449A-8F46-C0CCC630D8ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "proTaxi.Domain", "proTaxi.Domain\proTaxi.Domain.csproj", "{AEE65B69-33B2-449A-8F46-C0CCC630D8ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proTaxi.Application", "proTaxi.Application\proTaxi.Application.csproj", "{4E914579-8EB9-42F5-88F1-B41D7CC5E902}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "proTaxi.Application", "proTaxi.Application\proTaxi.Application.csproj", "{4E914579-8EB9-42F5-88F1-B41D7CC5E902}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proTaxi.Persistence", "proTaxi.Persistence\proTaxi.Persistence.csproj", "{9070E7D3-40F1-48BF-A6F9-76915C5B78E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "proTaxi.Persistence", "proTaxi.Persistence\proTaxi.Persistence.csproj", "{9070E7D3-40F1-48BF-A6F9-76915C5B78E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proTaxi.Web", "proTaxi.Web\proTaxi.Web.csproj", "{B62DE9AA-EC59-4F5D-9B5F-C113B6E310E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "proTaxi.Web", "proTaxi.Web\proTaxi.Web.csproj", "{B62DE9AA-EC59-4F5D-9B5F-C113B6E310E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proTaxi.Api", "proTaxi.Api\proTaxi.Api.csproj", "{8C410CB6-F114-48A7-A8A7-8B2CFEF15D3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "proTaxi.Api", "proTaxi.Api\proTaxi.Api.csproj", "{8C410CB6-F114-48A7-A8A7-8B2CFEF15D3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proTaxi.Web.API", "proTaxi.Web.API\proTaxi.Web.API.csproj", "{FAD1B9AF-DAD8-4859-9B05-EA0119242591}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{8C410CB6-F114-48A7-A8A7-8B2CFEF15D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C410CB6-F114-48A7-A8A7-8B2CFEF15D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C410CB6-F114-48A7-A8A7-8B2CFEF15D3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAD1B9AF-DAD8-4859-9B05-EA0119242591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAD1B9AF-DAD8-4859-9B05-EA0119242591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAD1B9AF-DAD8-4859-9B05-EA0119242591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAD1B9AF-DAD8-4859-9B05-EA0119242591}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
