@@ -54,7 +54,6 @@ namespace proTaxi.Api.Controllers
 
             result = await this.taxiRepository.Save(new Domain.Entities.Taxi()
             {
-                Id = taxiSave.Id,
                 Placa = taxiSave.Placa,
                 CreationDate = taxiSave.CreationDate,
                 CreationUser = taxiSave.CreationUser
@@ -68,7 +67,7 @@ namespace proTaxi.Api.Controllers
         }
 
         // PUT api/<TaxiController>/5
-        [HttpPut("UpdateTaxi")]
+        [HttpPost("UpdateTaxi")]
         public async Task<IActionResult> Put([FromBody] TaxiUpdateDto taxiUpdate)
         {
             bool result = false;

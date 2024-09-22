@@ -13,5 +13,7 @@ namespace proTaxi.Persistence.Context
         }
         public DbSet<Taxi> Taxi { get; set; }
         public DbSet<Viaje> Viaje { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<GrupoUsuarios> GrupoUsuarios { get; set; }
     }
 }

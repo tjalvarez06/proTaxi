@@ -75,6 +75,7 @@ namespace proTaxi.Persistence.Repositories
                 {
                     Id = taxi.Id,
                     Placa = taxi.Placa,
+                
                 };
             }
             catch (Exception ex)

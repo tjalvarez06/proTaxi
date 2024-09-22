@@ -161,6 +161,7 @@ namespace proTaxi.Persistence.Repositories
                 viajeToUpdate.UsuarioId = entity.UsuarioId;
                 viajeToUpdate.ModifyDate = entity.ModifyDate;
                 viajeToUpdate.ModifyUser = entity.ModifyUser;
+                viajeToUpdate.Id = entity.Id;
 
                 result = await base.Update(viajeToUpdate);
             }

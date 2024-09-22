@@ -4,8 +4,6 @@ using proTaxi.Domain.Entities;
 using proTaxi.Domain.Interfaces;
 using proTaxi.Domain.Models;
 using proTaxi.Persistence.Models.Taxi;
-using proTaxi.Persistence.Models.Viaje;
-using System.Linq.Expressions;
 
 namespace proTaxi.Persistence.Interfaces
 {

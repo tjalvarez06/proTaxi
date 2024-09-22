@@ -57,9 +57,9 @@ namespace proTaxi.Api.Controllers
                 FechaFin = viajeSave.FechaFin,
                 Desde = viajeSave.Desde,
                 Hasta = viajeSave.Hasta,
-                Calificacion = viajeSave.Calificacion,
                 TaxiId = viajeSave.TaxiId,
                 UsuarioId = viajeSave.UsuarioId,
+                Calificacion = viajeSave.Calificacion,
                 CreationDate = viajeSave.CreationDate,
                 CreationUser = viajeSave.CreationUser
             });
