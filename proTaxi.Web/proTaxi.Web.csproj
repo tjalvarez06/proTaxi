@@ -14,8 +14,4 @@
     <ProjectReference Include="..\proTaxi.Persistence\proTaxi.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Usuario\" />
-  </ItemGroup>
-
 </Project>

@@ -145,7 +145,7 @@ namespace proTaxi.Persistence.Repositories
                     usuarioToUpdate.Documento = entity.Documento;
                     usuarioToUpdate.Nombre = entity.Nombre;
                     usuarioToUpdate.Apellido = entity.Apellido;
-                    usuarioToUpdate.GrupoUsuariosId = entity.GrupoUsuariosId;
+                    //usuarioToUpdate.GrupoUsuariosId = entity.GrupoUsuariosId;
                     usuarioToUpdate.ModifyDate = entity.ModifyDate;
                     usuarioToUpdate.ModifyUser = entity.ModifyUser;
                 

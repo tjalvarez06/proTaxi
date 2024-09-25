@@ -12,6 +12,7 @@ builder.Services.AddDbContext<TaxiDb>(opcions =>
                                       opcions.UseSqlServer(builder.Configuration.GetConnectionString("TaxiDb")));
 
 builder.Services.AddTransient<IGrupoUsuariosRepository, GrupoUsuariosRepository>();
+builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 
 var app = builder.Build();
 

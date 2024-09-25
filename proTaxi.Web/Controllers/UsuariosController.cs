@@ -1,75 +1,70 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using proTaxi.Domain.Entities;
 using proTaxi.Persistence.Interfaces;
-using proTaxi.Persistence.Models.GrupoUsuarios;
-using proTaxi.Web.Models.GrupoUsuarios;
-
+using proTaxi.Persistence.Models.Usuario;
+using proTaxi.Web.Models.Usuario;
 
 namespace proTaxi.Web.Controllers
 {
-    public class GrupoUsuariosController : Controller
+    public class UsuariosController : Controller
     {
-        private readonly IGrupoUsuariosRepository grupoUsuariosRepository;
+        private readonly IUsuarioRepository UsuarioRepository;
 
 
         #region"Acciones"
-        public GrupoUsuariosController(IGrupoUsuariosRepository grupoUsuariosRepository)
+        public UsuariosController(IUsuarioRepository UsuarioRepository)
         {
-            this.grupoUsuariosRepository = grupoUsuariosRepository;
+            this.UsuarioRepository = UsuarioRepository;
         }
-        // GET: GrupoUsuariosController
+        
         public async Task<IActionResult> Index()
         {
-            var result = await this.grupoUsuariosRepository.GetGruposUsuarios();
+            var result = await this.UsuarioRepository.GetUsuarios();
 
             return View(result);
         }
-
-        // GET: GrupoUsuariosController/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            GrupoUsuariosModel model;
-            model = await GetGrupoUsuariosInfo(id);
+            UsuarioModel model;
+            model = await GetUsuariosInfo(id);
             if (model is null)
             {
                 return View();
             }
             return View(model);
         }
-
-
-
-        // GET: GrupoUsuariosController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: GrupoUsuariosController/Create
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GrupoUsuariosSaveDto saveDto)
+        public async Task<IActionResult> Create(UsuarioSaveDto saveDto)
         {
             try
             {
                 saveDto.ChangeDate = DateTime.Now;
                 saveDto.ChangeUser = 1;
 
-                GrupoUsuarios grupoUsuarios = new GrupoUsuarios()
-                {
-                    Name = saveDto.Name,
+                Usuario Usuario = new Usuario()
+                {                      
+                    Documento = saveDto.Documento, 
+                    Nombre = saveDto.Nombre, 
+                    Apellido = saveDto.Apellido,
                     CreationDate = saveDto.ChangeDate,
-                    CreationUser = saveDto.ChangeUser
+                    CreationUser = saveDto.ChangeUser,
+                    GrupoUsuariosId = saveDto.GrupoUsuariosId,
                 };
-                var result = await this.grupoUsuariosRepository.Save(grupoUsuarios);
+                var result = await this.UsuarioRepository.Save(Usuario);
                 if (result)
                 {
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    ViewBag.Message = "Error creando el Grupo de usuarios";
+                    ViewBag.Message = "Error creando el usuario";
                     return View();
                 }
             }
@@ -79,10 +74,9 @@ namespace proTaxi.Web.Controllers
             }
         }
 
-        // GET: GrupoUsuariosController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            GrupoUsuariosModel model = await GetGrupoUsuariosInfo(id);
+            UsuarioModel model = await GetUsuariosInfo(id);
 
             if (model is null)
             {
@@ -91,31 +85,32 @@ namespace proTaxi.Web.Controllers
             return View(model);
         }
 
-        // POST: GrupoUsuariosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(GrupoUsuariosUpdateDto updateDto)
+        public async Task<IActionResult> Edit(UsuarioUpdateDto updateDto)
         {
             try
             {
                 updateDto.ChangeDate = DateTime.Now;
                 updateDto.ChangeUser = 1;
 
-                GrupoUsuarios grupoUsuarios = new GrupoUsuarios()
-                { 
+                Usuario Usuarios = new Usuario()
+                {
                     Id = updateDto.Id,
-                    Name = updateDto.Name,
+                    Documento = updateDto.Documento,
+                    Nombre = updateDto.Nombre,
+                    Apellido = updateDto.Apellido,
                     ModifyDate = updateDto.ChangeDate,
                     ModifyUser = updateDto.ChangeUser
                 };
-                var result = await this.grupoUsuariosRepository.Update(grupoUsuarios);
+                var result = await this.UsuarioRepository.Update(Usuarios);
                 if (result)
                 {
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    ViewBag.Message = "Error modificando el Grupo de usuarios";
+                    ViewBag.Message = "Error modificando el usuario";
                     return View();
                 }
             }
@@ -127,15 +122,17 @@ namespace proTaxi.Web.Controllers
         #endregion
 
         #region"Metodos Privados"
-        private async Task<GrupoUsuariosModel> GetGrupoUsuariosInfo(int id)
+        private async Task<UsuarioModel> GetUsuariosInfo(int id)
         {
-            GrupoUsuariosModel model = new GrupoUsuariosModel();
-            var grupoUsuarios = await this.grupoUsuariosRepository.GetEntityBy(id);
+            UsuarioModel model = new UsuarioModel();
+            var Usuario = await this.UsuarioRepository.GetEntityBy(id);
 
-            model = new GrupoUsuariosModel()
+            model = new UsuarioModel()
             {
-                Id = grupoUsuarios.Id,
-                Name = grupoUsuarios.Name,
+                Id = Usuario.Id,
+                Documento = Usuario.Documento,
+                Nombre = Usuario.Nombre,
+                Apellido = Usuario.Apellido,
             };
             return model;
         }
